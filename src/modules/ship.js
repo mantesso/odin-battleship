@@ -4,14 +4,14 @@ class Ship {
     this.hits = 0;
   }
 
-  hit = () => {
+  hit() {
     this.hits += 1;
     console.log("Ship hitted");
-  };
+  }
 
-  isSunk = () => {
+  isSunk() {
     return this.hits >= this.length;
-  };
+  }
 }
 
 module.exports = Ship;
