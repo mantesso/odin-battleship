@@ -28,15 +28,17 @@ class Gameboard {
 
     const ship = new Ship(shipLength);
 
-    for (let i = 0; i < ship.length; i++) {
+    for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
         if (!this.shipsArray[coord[0]][coord[1] + i]) {
+          this.markBufferZoneH([coord[0], coord[1] + i], i, shipLength);
           this.shipsArray[coord[0]][coord[1] + i] = ship;
         } else {
           return false;
         }
       } else if (orientation == "v") {
         if (!this.shipsArray[coord[0] + i][coord[1]]) {
+          this.markBufferZoneV([coord[0] + i, coord[1]], i, shipLength);
           this.shipsArray[coord[0] + i][coord[1]] = ship;
         } else {
           return false;
@@ -44,6 +46,118 @@ class Gameboard {
       }
     }
     return true;
+  }
+
+  markBufferZoneH(coord, i, shipLength) {
+    console.log(coord, i, shipLength);
+    let neighbors;
+    if (shipLength == 1) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i == 0) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [0, -1],
+        [1, -1],
+        [1, 0],
+      ];
+    } else if (i == shipLength - 1) {
+      neighbors = [
+        [-1, 0],
+        [-1, 1],
+        [0, 1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i > 0 && i < shipLength) {
+      neighbors = [
+        [-1, 0],
+        [1, 0],
+      ];
+    }
+
+    neighbors.forEach(([dx, dy]) => {
+      const newX = coord[0] + dx;
+      const newY = coord[1] + dy;
+
+      // Check if the new coordinates are within grid bounds
+      if (
+        newX >= 0 &&
+        newX < this.shipsArray.length &&
+        newY >= 0 &&
+        newY < this.shipsArray[newX].length
+      ) {
+        // Mark the cell as part of the buffer zone, if it's not already part of a ship
+        if (this.shipsArray[newX][newY] === null) {
+          this.shipsArray[newX][newY] = 1; // Use a distinctive marker for buffer zones
+        }
+      }
+    });
+  }
+
+  markBufferZoneV(coord, i, shipLength) {
+    console.log(coord, i, shipLength);
+    let neighbors;
+    if (shipLength == 1) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i == 0) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+      ];
+    } else if (i == shipLength - 1) {
+      neighbors = [
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i > 0 && i < shipLength) {
+      neighbors = [
+        [0, -1],
+        [0, 1],
+      ];
+    }
+
+    neighbors.forEach(([dx, dy]) => {
+      const newX = coord[0] + dx;
+      const newY = coord[1] + dy;
+
+      // Check if the new coordinates are within grid bounds
+      if (
+        newX >= 0 &&
+        newX < this.shipsArray.length &&
+        newY >= 0 &&
+        newY < this.shipsArray[newX].length
+      ) {
+        // Mark the cell as part of the buffer zone, if it's not already part of a ship
+        if (this.shipsArray[newX][newY] === null) {
+          this.shipsArray[newX][newY] = 1; // Use a distinctive marker for buffer zones
+        }
+      }
+    });
   }
 
   receiveAttack(coord) {
@@ -71,13 +185,10 @@ class Gameboard {
 
 module.exports = Gameboard;
 
-// let gameboard = new Gameboard();
-// // console.log(gameboard.initializeGameboard());
-// console.log(gameboard.placeShip(1, [0, 0], "v"));
-// console.log(gameboard.receiveAttack([0, 0]));
-// // console.log(gameboard.shipsArray);
-// console.log(gameboard.allSunk());
+let gameboard = new Gameboard();
 
-let arr = [1, 2, 3];
-arr[4] = "aaa";
-console.log(arr);
+// console.log(gameboard.placeShip(3, [1, 1], "h"));
+console.log(gameboard.placeShip(3, [6, 7], "v"));
+// console.log(gameboard.receiveAttack([0, 0]));
+console.table(gameboard.shipsArray);
+// console.log(gameboard.allSunk());
