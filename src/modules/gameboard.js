@@ -3,11 +3,13 @@ const Ship = require("./ship");
 class Gameboard {
   constructor() {
     this.shipsArray = [];
+    this.initializeshipsArray();
+
     this.missedShots = [];
     this.successShots = [];
   }
 
-  initializeGameboard() {
+  initializeshipsArray() {
     for (let y = 0; y < 10; y++) {
       this.shipsArray[y] = [];
       for (let x = 0; x < 10; x++) {
@@ -30,13 +32,30 @@ class Gameboard {
 
   receiveAttack(coord) {
     let block = this.shipsArray[coord[0]][coord[1]];
+    console.log(block);
+    if (block) {
+      block.hit();
+      this.successShots.push(coord);
+    } else {
+      this.missedShots.push(coord);
+    }
   }
+
   allSunk() {
-    return false;
+    return this.shipsArray
+      .flat()
+      .filter((n) => n)
+      .every((block) => {
+        if (block.isSunk()) {
+          return true;
+        }
+      });
   }
 }
 
 let gameboard = new Gameboard();
-console.log(gameboard.initializeGameboard());
-console.log(gameboard.placeShip(4, [1, 7], "v"));
-console.log(gameboard.shipsArray);
+// console.log(gameboard.initializeGameboard());
+console.log(gameboard.placeShip(1, [0, 0], "v"));
+console.log(gameboard.receiveAttack([0, 0]));
+// console.log(gameboard.shipsArray);
+console.log(gameboard.allSunk());
