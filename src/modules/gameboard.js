@@ -3,13 +3,13 @@ const Ship = require("./ship");
 class Gameboard {
   constructor() {
     this.shipsArray = [];
-    this.initializeshipsArray();
+    this.initializeShipsArray();
 
     this.missedShots = [];
     this.successShots = [];
   }
 
-  initializeshipsArray() {
+  initializeShipsArray() {
     for (let y = 0; y < 10; y++) {
       this.shipsArray[y] = [];
       for (let x = 0; x < 10; x++) {
@@ -19,15 +19,31 @@ class Gameboard {
   }
 
   placeShip(shipLength, coord, orientation) {
+    if (orientation === "h" && coord[1] + shipLength > 10) {
+      return false; // Out of bounds horizontally
+    }
+    if (orientation === "v" && coord[0] + shipLength > 10) {
+      return false; // Out of bounds vertically
+    }
+
     const ship = new Ship(shipLength);
 
     for (let i = 0; i < ship.length; i++) {
       if (orientation == "h") {
-        this.shipsArray[coord[0]][coord[1] + i] = ship;
+        if (!this.shipsArray[coord[0]][coord[1] + i]) {
+          this.shipsArray[coord[0]][coord[1] + i] = ship;
+        } else {
+          return false;
+        }
       } else if (orientation == "v") {
-        this.shipsArray[coord[0] + i][coord[1]] = ship;
+        if (!this.shipsArray[coord[0] + i][coord[1]]) {
+          this.shipsArray[coord[0] + i][coord[1]] = ship;
+        } else {
+          return false;
+        }
       }
     }
+    return true;
   }
 
   receiveAttack(coord) {
@@ -61,3 +77,7 @@ module.exports = Gameboard;
 // console.log(gameboard.receiveAttack([0, 0]));
 // // console.log(gameboard.shipsArray);
 // console.log(gameboard.allSunk());
+
+let arr = [1, 2, 3];
+arr[4] = "aaa";
+console.log(arr);
