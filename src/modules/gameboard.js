@@ -163,7 +163,7 @@ class Gameboard {
   receiveAttack(coord) {
     let block = this.shipsArray[coord[0]][coord[1]];
     console.log(block);
-    if (block) {
+    if (block instanceof Ship) {
       block.hit();
       this.successShots.push(coord);
     } else {
@@ -174,7 +174,9 @@ class Gameboard {
   allSunk() {
     return this.shipsArray
       .flat()
-      .filter((n) => n)
+      .filter((n) => {
+        n instanceof Ship ? true : false;
+      })
       .every((block) => {
         if (block.isSunk()) {
           return true;
@@ -185,10 +187,10 @@ class Gameboard {
 
 module.exports = Gameboard;
 
-let gameboard = new Gameboard();
+// let gameboard = new Gameboard();
 
 // console.log(gameboard.placeShip(3, [1, 1], "h"));
-console.log(gameboard.placeShip(3, [6, 7], "v"));
+// console.log(gameboard.placeShip(3, [1, 1], "v"));
 // console.log(gameboard.receiveAttack([0, 0]));
-console.table(gameboard.shipsArray);
+// console.table(gameboard.shipsArray);
 // console.log(gameboard.allSunk());
