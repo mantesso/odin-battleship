@@ -53,9 +53,11 @@ class Gameboard {
   }
 }
 
-let gameboard = new Gameboard();
-// console.log(gameboard.initializeGameboard());
-console.log(gameboard.placeShip(1, [0, 0], "v"));
-console.log(gameboard.receiveAttack([0, 0]));
-// console.log(gameboard.shipsArray);
-console.log(gameboard.allSunk());
+module.exports = Gameboard;
+
+// let gameboard = new Gameboard();
+// // console.log(gameboard.initializeGameboard());
+// console.log(gameboard.placeShip(1, [0, 0], "v"));
+// console.log(gameboard.receiveAttack([0, 0]));
+// // console.log(gameboard.shipsArray);
+// console.log(gameboard.allSunk());
