@@ -49,7 +49,6 @@ class Gameboard {
   }
 
   markBufferZoneH(coord, i, shipLength) {
-    console.log(coord, i, shipLength);
     let neighbors;
     if (shipLength == 1) {
       neighbors = [
@@ -85,27 +84,10 @@ class Gameboard {
       ];
     }
 
-    neighbors.forEach(([dx, dy]) => {
-      const newX = coord[0] + dx;
-      const newY = coord[1] + dy;
-
-      // Check if the new coordinates are within grid bounds
-      if (
-        newX >= 0 &&
-        newX < this.shipsArray.length &&
-        newY >= 0 &&
-        newY < this.shipsArray[newX].length
-      ) {
-        // Mark the cell as part of the buffer zone, if it's not already part of a ship
-        if (this.shipsArray[newX][newY] === null) {
-          this.shipsArray[newX][newY] = 1; // Use a distinctive marker for buffer zones
-        }
-      }
-    });
+    this.distributeBuffer(coord, neighbors);
   }
 
   markBufferZoneV(coord, i, shipLength) {
-    console.log(coord, i, shipLength);
     let neighbors;
     if (shipLength == 1) {
       neighbors = [
@@ -140,7 +122,10 @@ class Gameboard {
         [0, 1],
       ];
     }
+    this.distributeBuffer(coord, neighbors);
+  }
 
+  distributeBuffer(coord, neighbors) {
     neighbors.forEach(([dx, dy]) => {
       const newX = coord[0] + dx;
       const newY = coord[1] + dy;
@@ -162,12 +147,13 @@ class Gameboard {
 
   receiveAttack(coord) {
     let block = this.shipsArray[coord[0]][coord[1]];
-    console.log(block);
     if (block instanceof Ship) {
       block.hit();
       this.successShots.push(coord);
+      return true;
     } else {
       this.missedShots.push(coord);
+      return false;
     }
   }
 

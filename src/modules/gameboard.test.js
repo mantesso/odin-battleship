@@ -17,6 +17,10 @@ describe("gameboard module tests", () => {
     expect(gameboard.placeShip(1, [0, 0], "h")).toBe(false);
   });
 
+  test("cannot place boat in buffer zone of another boat", () => {
+    expect(gameboard.placeShip(1, [1, 1], "h")).toBe(false);
+  });
+
   test("determines whether or not the attack hit a ship", () => {
     gameboard.receiveAttack([0, 0]);
     expect(gameboard.shipsArray[0][0].hits).toBe(1);
