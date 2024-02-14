@@ -1,7 +1,8 @@
 const Player = require("./player");
 
-describe("test player class", () => {
+describe("player class", () => {
   const player = new Player();
+
   test("computer is capable of making random plays", () => {
     let attack = player.randomAttack();
     expect(attack[0]).toBeLessThanOrEqual(9);
