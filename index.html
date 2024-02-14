@@ -6,8 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Odin battleship</title>
   </head>
-  <body>
-    <h1 class="text-4xl text-blue-700">Odin battleship</h1>
+  <body class="bg-purple-50 mx-auto">
+    <h1 class="text-4xl text-blue-700 text-center my-8">Odin battleship</h1>
+    <div class="relative mx-auto">
+      <div
+        id="playerBoard"
+        class="grid grid-cols-10 grid-rows-10 w-[320px] h-[320px]"
+      ></div>
+      <div class="absolute -top-[26px] flex text-xs">
+        <div class="w-[32px] text-center">A</div>
+        <div class="w-[32px] text-center">B</div>
+        <div class="w-[32px] text-center">C</div>
+        <div class="w-[32px] text-center">D</div>
+        <div class="w-[32px] text-center">E</div>
+        <div class="w-[32px] text-center">F</div>
+        <div class="w-[32px] text-center">G</div>
+        <div class="w-[32px] text-center">H</div>
+        <div class="w-[32px] text-center">I</div>
+        <div class="w-[32px] text-center">J</div>
+      </div>
+    </div>
     <script src="bundle.js"></script>
   </body>
 </html>
