@@ -34,7 +34,7 @@ gameboard.receiveAttack([1, 1]);
 
 let enemy = new Gameboard();
 enemy.placeShip(2, [4, 1], "h");
-enemy.placeShip(1, [6, 3], "v");
+enemy.placeShip(1, [0, 0], "v");
 
 initializePlayerBoard = (gameboard) => {
   for (let y = 0; y < 10; y++) {
@@ -99,11 +99,13 @@ initializePlayerBoard = (gameboard) => {
   }
 };
 
-initializeEnemyBoard = (gameboard) => {
+updateEnemyBoard = (gameboard) => {
+  console.log("updateEnemyBoard Function");
+  console.log(gameboard.missedShots);
+
+  enemyBoard.innerHTML = "";
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
-      let shipBlock = gameboard.shipsArray[y][x];
-
       let grid = document.createElement("div");
       grid.classList.add(
         "w-[32px]",
@@ -114,12 +116,6 @@ initializeEnemyBoard = (gameboard) => {
         "outline-purple-900",
         "relative"
       );
-
-      if (shipBlock instanceof Ship) {
-        grid.classList.remove("bg-white");
-        grid.classList.add("bg-indigo-400");
-        grid.classList.add("cursor-move");
-      }
 
       let missedDot = document.createElement("div");
       missedDot.innerText = "•";
@@ -157,10 +153,19 @@ initializeEnemyBoard = (gameboard) => {
 
       grid.setAttribute("data-y", y);
       grid.setAttribute("data-x", x);
+      grid.addEventListener("click", (e) => {
+        let coord = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
+        attackEnemy(coord, gameboard);
+      });
       enemyBoard.appendChild(grid);
     }
   }
 };
 
+const attackEnemy = (coord, enemyBoard) => {
+  enemyBoard.receiveAttack(coord);
+  updateEnemyBoard(enemyBoard);
+};
+
 initializePlayerBoard(gameboard);
-initializeEnemyBoard(enemy);
+updateEnemyBoard(enemy);
