@@ -12,6 +12,8 @@ initializeBoard = () => {
         "outline-1",
         "outline-purple-900"
       );
+      grid.setAttribute("data-y", y);
+      grid.setAttribute("data-x", x);
       //   `<div data-y=${y} data-x=${x} class="w-[32px] h-[32px] bg-white border border-slate-700"></div>`;
       playerBoard.appendChild(grid);
     }
