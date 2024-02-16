@@ -3,6 +3,8 @@ const playerBoard = document.getElementById("playerBoard");
 const enemyBoard = document.getElementById("enemyBoard");
 
 const updatePlayerBoard = (gameboard) => {
+  playerBoard.innerHTML = "";
+
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       let shipBlock = gameboard.shipsArray[y][x];
@@ -65,9 +67,9 @@ const updatePlayerBoard = (gameboard) => {
   }
 };
 
-const updateEnemyBoard = (gameboard) => {
+const updateEnemyBoard = (gameboard, onAttack) => {
   console.log("updateEnemyBoard Function");
-  console.log(gameboard.missedShots);
+  console.log(`missed shots on enemy board: ${gameboard.missedShots}`);
 
   enemyBoard.innerHTML = "";
   for (let y = 0; y < 10; y++) {
@@ -126,17 +128,12 @@ const updateEnemyBoard = (gameboard) => {
       ) {
         grid.addEventListener("click", (e) => {
           let coord = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-          attackEnemy(coord, gameboard);
+          onAttack(coord);
         });
       }
       enemyBoard.appendChild(grid);
     }
   }
-};
-
-const attackEnemy = (coord, enemyBoard) => {
-  enemyBoard.receiveAttack(coord);
-  updateEnemyBoard(enemyBoard);
 };
 
 module.exports = {

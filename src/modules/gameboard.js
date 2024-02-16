@@ -146,7 +146,9 @@ class Gameboard {
   }
 
   receiveAttack(coord) {
-    let block = this.shipsArray[coord[0]][coord[1]];
+    console.log(`receiveAttack function coord: ${coord}`);
+    console.log(this.missedShots);
+    let block = this.shipsArray[coord[1]][coord[0]];
     if (block instanceof Ship) {
       block.hit();
       this.successShots.push(coord);
