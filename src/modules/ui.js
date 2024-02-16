@@ -37,7 +37,7 @@ const updatePlayerBoard = (gameboard) => {
         "right-[6px]",
         "cursor-default"
       );
-      if (gameboard.missedShots.some(([dx, dy]) => dx === x && dy === y)) {
+      if (gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-gray-100");
         grid.appendChild(missedDot);
@@ -54,7 +54,7 @@ const updatePlayerBoard = (gameboard) => {
         "right-[6px]",
         "cursor-default"
       );
-      if (gameboard.successShots.some(([dx, dy]) => dx === x && dy === y)) {
+      if (gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-red-100");
         grid.appendChild(successX);
@@ -96,7 +96,7 @@ const updateEnemyBoard = (gameboard, onAttack) => {
         "right-[6px]",
         "cursor-default"
       );
-      if (gameboard.missedShots.some(([dx, dy]) => dx === x && dy === y)) {
+      if (gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-gray-100");
         grid.appendChild(missedDot);
@@ -113,7 +113,7 @@ const updateEnemyBoard = (gameboard, onAttack) => {
         "right-[6px]",
         "cursor-default"
       );
-      if (gameboard.successShots.some(([dx, dy]) => dx === x && dy === y)) {
+      if (gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-red-100");
         grid.appendChild(successX);
@@ -123,11 +123,11 @@ const updateEnemyBoard = (gameboard, onAttack) => {
       grid.setAttribute("data-x", x);
       // this if blocks clicking missed or success shots
       if (
-        !gameboard.missedShots.some(([dx, dy]) => dx === x && dy === y) &&
-        !gameboard.successShots.some(([dx, dy]) => dx === x && dy === y)
+        !gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x) &&
+        !gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)
       ) {
         grid.addEventListener("click", (e) => {
-          let coord = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
+          let coord = [Number(e.target.dataset.y), Number(e.target.dataset.x)];
           onAttack(coord);
         });
       }

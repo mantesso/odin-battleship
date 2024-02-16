@@ -3,6 +3,7 @@ const { updatePlayerBoard, updateEnemyBoard } = require("./ui");
 
 let player = new Player();
 player.gameboard.placeShip(3, [1, 1], "h");
+player.gameboard.placeShip(3, [0, 5], "h");
 player.gameboard.placeShip(4, [3, 3], "v");
 // player.gameboard.receiveAttack([0, 0]);
 // player.gameboard.receiveAttack([6, 6]);
@@ -18,19 +19,27 @@ updateEnemyBoard(enemy.gameboard, handlePlayerAttack);
 
 function handlePlayerAttack(coord) {
   console.log("Player attacks enemy");
-  const hit = enemy.gameboard.receiveAttack(coord);
+  enemy.gameboard.receiveAttack(coord);
   updateEnemyBoard(enemy.gameboard, handlePlayerAttack); // Refresh enemy board display
 
-  if (hit) {
-    // Check if game has ended
-    if (enemy.gameboard.allSunk()) {
-      alert("Player wins!");
-      // Handle end game
-    }
+  // Check if game has ended
+  if (enemy.gameboard.allSunk()) {
+    alert("Player wins!");
+    // Handle end game
   } else {
-    console.log("computer attacks");
-    let attackCoords = enemy.randomAttack();
-    player.gameboard.receiveAttack(attackCoords);
-    updatePlayerBoard(player.gameboard);
+    computerAttacks();
+  }
+}
+
+function computerAttacks() {
+  console.log("computer attacks");
+  let attackCoords = enemy.randomAttack();
+  player.gameboard.receiveAttack(attackCoords);
+  updatePlayerBoard(player.gameboard);
+
+  // Check if game has ended
+  if (player.gameboard.allSunk()) {
+    alert("Computer wins!");
+    // Handle end game
   }
 }
