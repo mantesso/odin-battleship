@@ -2,7 +2,7 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  static setOfShips = [4, 1, 2, 2, 3];
 
   constructor() {
     this.shipsArray = [];
@@ -46,6 +46,7 @@ class Gameboard {
   }
 
   placeShip(shipLength, coord, orientation) {
+    console.log(shipLength, coord, orientation);
     if (orientation === "h" && coord[1] + shipLength > 10) {
       return false; // Out of bounds horizontally
     }
