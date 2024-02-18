@@ -1,6 +1,9 @@
 const Ship = require("./ship");
 
 class Gameboard {
+  // default set of ships (lenght)
+  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+
   constructor() {
     this.shipsArray = [];
     this.initializeShipsArray();
@@ -198,6 +201,29 @@ class Gameboard {
     return true;
   }
 
+  placeRandomSetOfShips() {
+    let set = Gameboard.setOfShips;
+    for (let i = 0; i < set.length; i++) {
+      let shipLength;
+      let coord;
+      let orientation;
+
+      let validPosition = false;
+      do {
+        shipLength = set[i];
+        coord = [this.getRandomInt(10), this.getRandomInt(10)];
+        orientation = this.getRandomInt(2) == 0 ? "h" : "v";
+        validPosition = this.isValidPosition(shipLength, coord, orientation);
+      } while (!validPosition);
+
+      this.placeShip(shipLength, coord, orientation);
+    }
+  }
+
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
   receiveAttack(coord) {
     let block = this.shipsArray[coord[0]][coord[1]];
     if (block instanceof Ship) {
@@ -219,8 +245,9 @@ class Gameboard {
 module.exports = Gameboard;
 
 let gameboard = new Gameboard();
-gameboard.placeShip(3, [1, 1], "h");
-console.log(gameboard.isValidPosition(1, [2, 2], "h"));
+// gameboard.placeShip(3, [1, 1], "h");
+// console.log(gameboard.isValidPosition(1, [2, 2], "h"));
+gameboard.placeRandomSetOfShips();
 
 // console.log(gameboard.placeShip(3, [1, 1], "h"));
 // console.log(gameboard.placeShip(3, [1, 1], "v"));
