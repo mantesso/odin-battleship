@@ -22,12 +22,7 @@ class Gameboard {
     if (orientation == "h") {
       if (coord[1] + shipLength > 10) return false;
       for (let i = 0; i < shipLength; i++) {
-        let neighbors = this.getHorizontalNeighbors(
-          coord[0],
-          coord[1] + i,
-          shipLength
-        );
-
+        let neighbors = this.getHorizontalNeighbors(i, shipLength);
         if (!this.checkNeighbors([coord[0], coord[1] + i], neighbors)) {
           return false;
         }
@@ -37,12 +32,7 @@ class Gameboard {
     if (orientation == "v") {
       if (coord[0] + shipLength > 10) return false;
       for (let i = 0; i < shipLength; i++) {
-        let neighbors = this.getVerticalNeighbors(
-          coord[0] + i,
-          coord[1],
-          shipLength
-        );
-
+        let neighbors = this.getVerticalNeighbors(i, shipLength);
         if (!this.checkNeighbors([coord[0] + i, coord[1]], neighbors)) {
           return false;
         }
@@ -118,6 +108,44 @@ class Gameboard {
       ];
     }
 
+    return neighbors;
+  }
+
+  getVerticalNeighbors(i, shipLength) {
+    let neighbors;
+    if (shipLength == 1) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i == 0) {
+      neighbors = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+      ];
+    } else if (i == shipLength - 1) {
+      neighbors = [
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+    } else if (i > 0 && i < shipLength) {
+      neighbors = [
+        [0, -1],
+        [0, 1],
+      ];
+    }
     return neighbors;
   }
 
@@ -220,6 +248,7 @@ class Gameboard {
 
   // return true if all neighbors are null
   checkNeighbors(coord, neighbors) {
+    console.log(neighbors);
     for (let i = 0; i < neighbors.length; i++) {
       const newX = coord[0] + neighbors[i][0];
       const newY = coord[1] + neighbors[i][1];
@@ -259,7 +288,7 @@ module.exports = Gameboard;
 
 let gameboard = new Gameboard();
 // gameboard.placeShip(3, [1, 1], "h");
-console.log(gameboard.isValidPosition(3, [0, 0], "h"));
+console.log(gameboard.isValidPosition(3, [7, 1], "h"));
 
 // console.log(gameboard.placeShip(3, [1, 1], "h"));
 // console.log(gameboard.placeShip(3, [1, 1], "v"));
