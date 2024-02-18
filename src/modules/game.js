@@ -1,16 +1,15 @@
 const Player = require("./player");
 const { updatePlayerBoard, updateEnemyBoard } = require("./ui");
 
+// creates players
 let player = new Player();
-player.gameboard.placeShip(3, [1, 1], "h");
-player.gameboard.placeShip(3, [0, 5], "h");
-player.gameboard.placeShip(4, [3, 3], "v");
-// player.gameboard.receiveAttack([0, 0]);
-// player.gameboard.receiveAttack([6, 6]);
-// player.gameboard.receiveAttack([1, 1]);
-console.log(player.randomAttack());
-
 let enemy = new Player();
+
+// ship positioning
+player.gameboard.placeShip(3, [1, 1], "h");
+player.gameboard.placeShip(4, [0, 7], "v");
+player.gameboard.placeShip(1, [5, 3], "v");
+player.gameboard.placeShip(3, [6, 7], "v");
 enemy.gameboard.placeShip(2, [4, 1], "h");
 enemy.gameboard.placeShip(1, [0, 0], "v");
 
@@ -27,7 +26,9 @@ function handlePlayerAttack(coord) {
     alert("Player wins!");
     // Handle end game
   } else {
-    computerAttacks();
+    setTimeout(() => {
+      computerAttacks();
+    }, 250);
   }
 }
 
@@ -39,6 +40,7 @@ function computerAttacks() {
 
   // Check if game has ended
   if (player.gameboard.allSunk()) {
+    updatePlayerBoard(player.gameboard);
     alert("Computer wins!");
     // Handle end game
   }
