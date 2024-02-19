@@ -11,8 +11,7 @@ player.gameboard.placeRandomSetOfShips();
 // player.gameboard.placeShip(4, [0, 7], "v");
 // player.gameboard.placeShip(1, [5, 3], "v");
 // player.gameboard.placeShip(3, [6, 7], "v");
-enemy.gameboard.placeShip(2, [4, 1], "h");
-enemy.gameboard.placeShip(1, [0, 0], "v");
+enemy.gameboard.placeRandomSetOfShips();
 
 updatePlayerBoard(player.gameboard);
 updateEnemyBoard(enemy.gameboard, handlePlayerAttack);
