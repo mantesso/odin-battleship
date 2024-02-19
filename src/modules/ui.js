@@ -2,6 +2,8 @@ const Ship = require("./ship");
 const playerBoard = document.getElementById("playerBoard");
 const enemyBoard = document.getElementById("enemyBoard");
 const placeRandom = document.getElementById("placeRandom");
+const enemyContainer = document.getElementById("enemyContainer");
+const startGameButton = document.getElementById("startGameButton");
 
 const updatePlayerBoard = (gameboard) => {
   playerBoard.innerHTML = "";
@@ -17,27 +19,22 @@ const updatePlayerBoard = (gameboard) => {
         "bg-white",
         "outline",
         "outline-1",
-        "outline-purple-900",
-        "relative"
+        "outline-slate-600",
+        "relative",
+        "flex",
+        "items-center",
+        "justify-center"
       );
 
       if (shipBlock instanceof Ship) {
         grid.classList.remove("bg-white");
-        grid.classList.add("bg-indigo-400");
+        grid.classList.add("bg-sky-500");
         grid.classList.add("cursor-move");
       }
 
       let missedDot = document.createElement("div");
       missedDot.innerText = "•";
-      missedDot.classList.add(
-        "text-2xl",
-        "absolute",
-        "-translate-y-1/2",
-        "-translate-x-1/2",
-        "top-[14px]",
-        "right-[6px]",
-        "cursor-default"
-      );
+      missedDot.classList.add("text-2xl", "cursor-default");
       if (gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-gray-100");
@@ -45,19 +42,24 @@ const updatePlayerBoard = (gameboard) => {
       }
 
       let successX = document.createElement("div");
-      successX.innerText = "X";
       successX.classList.add(
-        "text-2xl",
-        "absolute",
-        "-translate-y-1/2",
-        "-translate-x-1/2",
-        "top-[14px]",
-        "right-[6px]",
-        "cursor-default"
+        "flex",
+        "items-center",
+        "justify-center",
+        "w-full",
+        "h-full",
+        "text-red-500"
       );
+      successX.innerHTML = `
+      <!-- https://feathericons.dev/?search=x&iconset=feather -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="main-grid-item-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="5">
+        <line x1="18" x2="6" y1="6" y2="18" />
+        <line x1="6" x2="18" y1="6" y2="18" />
+      </svg>`;
+
       if (gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)) {
-        grid.classList.remove("bg-white");
-        grid.classList.add("bg-red-100");
+        grid.classList.remove("bg-sky-500");
+        grid.classList.add("bg-sky-700");
         grid.appendChild(successX);
       }
 
@@ -82,21 +84,16 @@ const updateEnemyBoard = (gameboard, onAttack) => {
         "bg-white",
         "outline",
         "outline-1",
-        "outline-purple-900",
-        "relative"
+        "outline-slate-600",
+        "relative",
+        "flex",
+        "items-center",
+        "justify-center"
       );
 
       let missedDot = document.createElement("div");
       missedDot.innerText = "•";
-      missedDot.classList.add(
-        "text-2xl",
-        "absolute",
-        "-translate-y-1/2",
-        "-translate-x-1/2",
-        "top-[14px]",
-        "right-[6px]",
-        "cursor-default"
-      );
+      missedDot.classList.add("text-2xl", "cursor-default");
       if (gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-gray-100");
@@ -104,16 +101,21 @@ const updateEnemyBoard = (gameboard, onAttack) => {
       }
 
       let successX = document.createElement("div");
-      successX.innerText = "X";
       successX.classList.add(
-        "text-2xl",
-        "absolute",
-        "-translate-y-1/2",
-        "-translate-x-1/2",
-        "top-[14px]",
-        "right-[6px]",
-        "cursor-default"
+        "flex",
+        "items-center",
+        "justify-center",
+        "w-full",
+        "h-full",
+        "text-red-500"
       );
+      successX.innerHTML = `
+      <!-- https://feathericons.dev/?search=x&iconset=feather -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="main-grid-item-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="5">
+        <line x1="18" x2="6" y1="6" y2="18" />
+        <line x1="6" x2="18" y1="6" y2="18" />
+      </svg>`;
+
       if (gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)) {
         grid.classList.remove("bg-white");
         grid.classList.add("bg-red-100");
@@ -137,8 +139,19 @@ const updateEnemyBoard = (gameboard, onAttack) => {
   }
 };
 
+const unFadeEnemyContainer = () => {
+  enemyBoard.classList.remove("opacity-40");
+};
+
+const hideStartGame = () => {
+  startGameButton.classList.add("hidden");
+};
+
 module.exports = {
   updatePlayerBoard,
   updateEnemyBoard,
+  unFadeEnemyContainer,
+  hideStartGame,
   placeRandom,
+  startGameButton,
 };

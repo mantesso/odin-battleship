@@ -72,10 +72,10 @@
           </div>
         </div>
       </div>
-      <div class="relative">
+      <div id="enemyContainer" class="relative">
         <div
           id="enemyBoard"
-          class="grid grid-cols-10 grid-rows-10 w-[320px] h-[320px]"
+          class="grid grid-cols-10 grid-rows-10 w-[320px] h-[320px] opacity-40"
         ></div>
         <div class="absolute -top-[26px] flex text-xs">
           <div class="w-[32px] text-center">A</div>
@@ -102,6 +102,16 @@
           <div class="w-[32px] h-[32px] text-center">10</div>
         </div>
         <div class="absolute text-xs bottom-[-32px]">Computer board</div>
+        <div
+          class="absolute text-xs top-1/2 right-1/2 translate-x-1/2 tranlate-y-1/2"
+        >
+          <button
+            id="startGameButton"
+            class="flex items-center gap-2 font-bold text-white bg-green-600 hover:bg-green-500 border-green-50 px-3 py-2 rounded-md"
+          >
+            Start Game
+          </button>
+        </div>
       </div>
     </div>
     <script src="bundle.js"></script>

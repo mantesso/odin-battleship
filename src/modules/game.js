@@ -1,9 +1,18 @@
 const Player = require("./player");
-const { updatePlayerBoard, updateEnemyBoard, placeRandom } = require("./ui");
+const {
+  updatePlayerBoard,
+  updateEnemyBoard,
+  placeRandom,
+  unFadeEnemyContainer,
+  hideStartGame,
+  startGameButton,
+} = require("./ui");
 
 // creates players
 let player = new Player();
 let enemy = new Player();
+
+let gameStarted = false;
 
 // ship positioning
 player.gameboard.placeRandomSetOfShips();
@@ -12,14 +21,24 @@ enemy.gameboard.placeRandomSetOfShips();
 updatePlayerBoard(player.gameboard);
 updateEnemyBoard(enemy.gameboard, handlePlayerAttack);
 
-function placeRandomShips() {
-  player.gameboard.placeRandomSetOfShips();
-  updatePlayerBoard(player.gameboard);
-}
-
 placeRandom.addEventListener("click", () => {
-  placeRandomShips();
+  if (!gameStarted) {
+    player.gameboard.placeRandomSetOfShips();
+    updatePlayerBoard(player.gameboard);
+  }
 });
+
+startGameButton.addEventListener("click", () => {
+  startGame();
+});
+
+function startGame() {
+  console.log("Game started");
+  gameStarted = true;
+  unFadeEnemyContainer();
+  hideStartGame();
+  placeRandom.classList.add("hidden");
+}
 
 function handlePlayerAttack(coord) {
   console.log("Player attacks enemy");
