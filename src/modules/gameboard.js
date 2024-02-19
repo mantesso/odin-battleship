@@ -2,7 +2,7 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  static setOfShips = [4, 1, 2, 2, 3];
+  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
 
   constructor() {
     this.shipsArray = [];
@@ -210,11 +210,13 @@ class Gameboard {
       let orientation;
 
       let validPosition = false;
+      let tries = 0;
       do {
         shipLength = set[i];
         coord = [this.getRandomInt(10), this.getRandomInt(10)];
         orientation = this.getRandomInt(2) == 0 ? "h" : "v";
         validPosition = this.isValidPosition(shipLength, coord, orientation);
+        tries++;
       } while (!validPosition);
 
       this.placeShip(shipLength, coord, orientation);
