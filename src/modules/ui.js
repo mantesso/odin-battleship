@@ -1,6 +1,7 @@
 const Ship = require("./ship");
 const playerBoard = document.getElementById("playerBoard");
 const enemyBoard = document.getElementById("enemyBoard");
+const placeRandom = document.getElementById("placeRandom");
 
 const updatePlayerBoard = (gameboard) => {
   playerBoard.innerHTML = "";
@@ -139,4 +140,5 @@ const updateEnemyBoard = (gameboard, onAttack) => {
 module.exports = {
   updatePlayerBoard,
   updateEnemyBoard,
+  placeRandom,
 };

@@ -1,3 +1,3 @@
 import "./style.css";
-import "./modules/ui";
 import "./modules/game";
+import "./modules/ui";

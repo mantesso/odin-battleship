@@ -217,12 +217,16 @@ class Gameboard {
   }
 
   placeRandomSetOfShips() {
+    // clear the board first
+    this.initializeShipsArray();
+
     // place first ship randomly
     let coord = [this.getRandomInt(4), this.getRandomInt(4)];
     let orientation = this.getRandomInt(2) == 0 ? "h" : "v";
     let shipLength = Gameboard.setOfShips[0];
     this.placeShip(shipLength, coord, orientation);
 
+    // place the rest of the ships with backtracking function
     if (!this.tryPlaceShips(Gameboard.setOfShips, 1)) {
       console.log("Failed to place all ships.");
     }
