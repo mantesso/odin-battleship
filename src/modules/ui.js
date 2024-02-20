@@ -8,14 +8,16 @@ const backdropBlur = document.getElementById("backdropBlur");
 const updatePlayerBoard = (gameboard) => {
   playerBoard.innerHTML = "";
 
+  const renderedShips = new Set();
+
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       let shipBlock = gameboard.shipsArray[y][x];
 
       let grid = document.createElement("div");
       grid.classList.add(
-        "w-[32px]",
-        "h-[32px]",
+        "w-[31px]",
+        "h-[31px]",
         "bg-white",
         "outline",
         "outline-1",
@@ -23,13 +25,32 @@ const updatePlayerBoard = (gameboard) => {
         "relative",
         "flex",
         "items-center",
-        "justify-center"
+        "justify-center",
+        "overflow-visible"
       );
 
-      if (shipBlock instanceof Ship) {
-        grid.classList.remove("bg-white");
-        grid.classList.add("bg-sky-500");
-        grid.classList.add("cursor-move");
+      if (shipBlock instanceof Ship && !renderedShips.has(shipBlock.id)) {
+        console.log(shipBlock);
+        renderedShips.add(shipBlock.id);
+
+        let ship = document.createElement("div");
+        if (shipBlock.orientation == "h") {
+          ship.style.width = `${shipBlock.length * 32 - 1}px`;
+          ship.style.height = `31px`;
+        } else {
+          ship.style.height = `${shipBlock.length * 32 - 1}px`;
+          ship.style.width = `31px`;
+        }
+
+        ship.classList.add("bg-sky-500", "absolute", "z-20", "top-0", "left-0");
+
+        ship.setAttribute("draggable", true);
+        ship.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          console.log(e);
+        });
+
+        grid.appendChild(ship);
       }
 
       let missedDot = document.createElement("div");
@@ -48,7 +69,9 @@ const updatePlayerBoard = (gameboard) => {
         "justify-center",
         "w-full",
         "h-full",
-        "text-red-500"
+        "text-red-500",
+        "bg-sky-600",
+        "z-30"
       );
       successX.innerHTML = `
       <!-- https://feathericons.dev/?search=x&iconset=feather -->
@@ -58,8 +81,7 @@ const updatePlayerBoard = (gameboard) => {
       </svg>`;
 
       if (gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)) {
-        grid.classList.remove("bg-sky-500");
-        grid.classList.add("bg-sky-700");
+        grid.classList.add("bg-sky-800");
         grid.appendChild(successX);
       }
 
@@ -79,8 +101,8 @@ const updateEnemyBoard = (gameboard, onAttack) => {
     for (let x = 0; x < 10; x++) {
       let grid = document.createElement("div");
       grid.classList.add(
-        "w-[32px]",
-        "h-[32px]",
+        "w-[31px]",
+        "h-[31px]",
         "bg-white",
         "outline",
         "outline-1",

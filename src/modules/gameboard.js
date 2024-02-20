@@ -53,7 +53,7 @@ class Gameboard {
       return false; // Out of bounds vertically
     }
 
-    const ship = new Ship(shipLength);
+    const ship = new Ship(shipLength, orientation);
 
     for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
@@ -220,7 +220,7 @@ class Gameboard {
     // clear the board first
     this.initializeShipsArray();
 
-    // place first ship randomly
+    // place first ship "randomly"
     let coord = [this.getRandomInt(4), this.getRandomInt(4)];
     let orientation = this.getRandomInt(2) == 0 ? "h" : "v";
     let shipLength = Gameboard.setOfShips[0];
@@ -260,12 +260,12 @@ class Gameboard {
 
   removeShip(shipLength, coord, orientation) {
     for (let i = 0; i < shipLength; i++) {
-      if (orientation === "h") {
+      if (orientation == "h") {
         this.shipsArray[coord[0]][coord[1] + i] = null;
         let neighbors = this.getHorizontalNeighbors(i, shipLength);
         this.clearNeighbors([coord[0], coord[1] + i], neighbors);
       } else {
-        // orientation === 'v'
+        // orientation == 'v'
         this.shipsArray[coord[0] + i][coord[1]] = null;
         let neighbors = this.getVerticalNeighbors(i, shipLength);
         this.clearNeighbors([coord[0] + i, coord[1]], neighbors);

@@ -1,7 +1,10 @@
 class Ship {
-  constructor(length) {
+  static idCount = 0;
+  constructor(length, orientation) {
+    this.id = ++this.constructor.idCount;
     this.length = length;
     this.hits = 0;
+    this.orientation = orientation;
   }
 
   hit() {
