@@ -139,20 +139,18 @@ const updateEnemyBoard = (gameboard, onAttack) => {
   }
 };
 
-const unFadeEnemyContainer = () => {
+const uiGameStarted = () => {
+  // unfade enemy container
   backdropBlur.classList.add("hidden");
   enemyBoard.classList.remove("opacity-40");
-};
 
-const hideStartGame = () => {
-  startGameButton.classList.add("hidden");
+  // hide place random button
+  placeRandom.classList.add("hidden");
 };
 
 module.exports = {
   updatePlayerBoard,
   updateEnemyBoard,
-  unFadeEnemyContainer,
-  hideStartGame,
-  placeRandom,
+  uiGameStarted,
   startGameButton,
 };

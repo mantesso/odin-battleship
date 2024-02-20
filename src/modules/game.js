@@ -2,9 +2,7 @@ const Player = require("./player");
 const {
   updatePlayerBoard,
   updateEnemyBoard,
-  placeRandom,
-  unFadeEnemyContainer,
-  hideStartGame,
+  uiGameStarted,
   startGameButton,
 } = require("./ui");
 
@@ -32,13 +30,13 @@ startGameButton.addEventListener("click", () => {
   startGame();
 });
 
-function startGame() {
+const startGame = () => {
   console.log("Game started");
   gameStarted = true;
-  unFadeEnemyContainer();
-  hideStartGame();
-  placeRandom.classList.add("hidden");
-}
+  uiGameStarted();
+};
+
+const gameOver = (winner) => {};
 
 function handlePlayerAttack(coord) {
   console.log("Player attacks enemy");
@@ -56,7 +54,7 @@ function handlePlayerAttack(coord) {
   }
 }
 
-function computerAttacks() {
+const computerAttacks = () => {
   console.log("computer attacks");
   let attackCoords = enemy.randomAttack();
   player.gameboard.receiveAttack(attackCoords);
@@ -68,4 +66,4 @@ function computerAttacks() {
     alert("Computer wins!");
     // Handle end game
   }
-}
+};
