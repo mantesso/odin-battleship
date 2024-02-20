@@ -2,8 +2,8 @@ const Ship = require("./ship");
 const playerBoard = document.getElementById("playerBoard");
 const enemyBoard = document.getElementById("enemyBoard");
 const placeRandom = document.getElementById("placeRandom");
-const enemyContainer = document.getElementById("enemyContainer");
 const startGameButton = document.getElementById("startGameButton");
+const backdropBlur = document.getElementById("backdropBlur");
 
 const updatePlayerBoard = (gameboard) => {
   playerBoard.innerHTML = "";
@@ -140,6 +140,7 @@ const updateEnemyBoard = (gameboard, onAttack) => {
 };
 
 const unFadeEnemyContainer = () => {
+  backdropBlur.classList.add("hidden");
   enemyBoard.classList.remove("opacity-40");
 };
 
