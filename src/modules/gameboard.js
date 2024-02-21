@@ -2,7 +2,7 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  static setOfShips = [1, 4, 3, 3, 2, 2, 2, 1, 1, 1];
+  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
 
   constructor() {
     this.shipsArray = [];
@@ -193,7 +193,7 @@ class Gameboard {
         continue;
       }
 
-      if (this.shipsArray[newX][newY] !== null) {
+      if (this.shipsArray[newX][newY] instanceof Ship) {
         return false;
       }
     }
@@ -221,7 +221,7 @@ class Gameboard {
     this.initializeShipsArray();
 
     // place first ship "randomly"
-    let coord = [this.getRandomInt(4), this.getRandomInt(4)];
+    let coord = [this.getRandomInt(6), this.getRandomInt(6)];
     let orientation = this.getRandomInt(2) == 0 ? "h" : "v";
     let shipLength = Gameboard.setOfShips[0];
     this.placeShip(shipLength, coord, orientation);
@@ -259,6 +259,7 @@ class Gameboard {
   }
 
   removeShip(shipLength, coord, orientation) {
+    console.log("remove ship function");
     for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
         this.shipsArray[coord[0]][coord[1] + i] = null;

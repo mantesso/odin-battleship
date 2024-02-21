@@ -45,9 +45,16 @@ const updatePlayerBoard = (gameboard) => {
         ship.classList.add("bg-sky-500", "absolute", "z-20", "top-0", "left-0");
 
         ship.setAttribute("draggable", true);
-        ship.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          console.log(e);
+        ship.setAttribute("data-length", shipBlock.length);
+        ship.setAttribute("data-orientation", shipBlock.orientation);
+        ship.setAttribute("ship-id", shipBlock.id);
+
+        ship.addEventListener("dragstart", (e) => {
+          console.log("dragstart event");
+          e.dataTransfer.setData("text/plain", shipBlock.id.toString());
+          e.dataTransfer.setData("shipLength", shipBlock.length.toString());
+          e.dataTransfer.setData("shipOrientation", shipBlock.orientation);
+          e.dataTransfer.setData("origCoord", [y, x]);
         });
 
         grid.appendChild(ship);
@@ -87,7 +94,39 @@ const updatePlayerBoard = (gameboard) => {
 
       grid.setAttribute("data-y", y);
       grid.setAttribute("data-x", x);
+
+      grid.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+      grid.addEventListener("drop", handleDrop);
+
       playerBoard.appendChild(grid);
+    }
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    const shipLength = Number(e.dataTransfer.getData("shipLength"));
+    const shipOrientation = e.dataTransfer.getData("shipOrientation");
+    const origCoord = e.dataTransfer
+      .getData("origCoord")
+      .split(",")
+      .map((x) => Number(x));
+    const targetCoord = [
+      Number(e.target.dataset.y),
+      Number(e.target.dataset.x),
+    ];
+
+    console.log((shipLength, targetCoord, shipOrientation, origCoord));
+
+    if (gameboard.isValidPosition(shipLength, targetCoord, shipOrientation)) {
+      console.log("valid position");
+      gameboard.placeShip(shipLength, targetCoord, shipOrientation);
+      gameboard.removeShip(shipLength, origCoord, shipOrientation);
+      updatePlayerBoard(gameboard);
+    } else {
+      console.log("invalid position");
+      console.table(gameboard.shipsArray);
     }
   }
 };
