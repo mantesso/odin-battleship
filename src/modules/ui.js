@@ -52,6 +52,7 @@ const updatePlayerBoard = (gameboard) => {
         ship.addEventListener("dragstart", (e) => {
           console.log("dragstart event");
           e.dataTransfer.setData("text/plain", shipBlock.id.toString());
+          e.dataTransfer.setData("shipId", shipBlock.id.toString());
           e.dataTransfer.setData("shipLength", shipBlock.length.toString());
           e.dataTransfer.setData("shipOrientation", shipBlock.orientation);
           e.dataTransfer.setData("origCoord", [y, x]);
@@ -106,6 +107,7 @@ const updatePlayerBoard = (gameboard) => {
 
   function handleDrop(e) {
     e.preventDefault();
+    const shipId = Number(e.dataTransfer.getData("shipId"));
     const shipLength = Number(e.dataTransfer.getData("shipLength"));
     const shipOrientation = e.dataTransfer.getData("shipOrientation");
     const origCoord = e.dataTransfer
@@ -117,13 +119,18 @@ const updatePlayerBoard = (gameboard) => {
       Number(e.target.dataset.x),
     ];
 
-    console.log((shipLength, targetCoord, shipOrientation, origCoord));
+    if (isNaN(targetCoord[0]) || isNaN(targetCoord[1])) {
+      return;
+    }
+
+    console.log(`target coord: ${targetCoord}`);
 
     if (gameboard.isValidPosition(shipLength, targetCoord, shipOrientation)) {
       console.log("valid position");
       gameboard.placeShip(shipLength, targetCoord, shipOrientation);
-      gameboard.removeShip(shipLength, origCoord, shipOrientation);
+      gameboard.removeShip(shipLength, origCoord, shipOrientation, shipId);
       updatePlayerBoard(gameboard);
+      console.table(gameboard.shipsArray);
     } else {
       console.log("invalid position");
       console.table(gameboard.shipsArray);

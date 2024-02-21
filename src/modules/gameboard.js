@@ -3,6 +3,7 @@ const Ship = require("./ship");
 class Gameboard {
   // default set of ships (lenght)
   static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  // static setOfShips = [2, 2];
 
   constructor() {
     this.shipsArray = [];
@@ -58,14 +59,24 @@ class Gameboard {
     for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
         if (!this.shipsArray[coord[0]][coord[1] + i]) {
-          this.markBufferZoneH([coord[0], coord[1] + i], i, shipLength);
+          this.markBufferZoneH(
+            [coord[0], coord[1] + i],
+            i,
+            shipLength,
+            ship.id
+          );
           this.shipsArray[coord[0]][coord[1] + i] = ship;
         } else {
           return false;
         }
       } else if (orientation == "v") {
         if (!this.shipsArray[coord[0] + i][coord[1]]) {
-          this.markBufferZoneV([coord[0] + i, coord[1]], i, shipLength);
+          this.markBufferZoneV(
+            [coord[0] + i, coord[1]],
+            i,
+            shipLength,
+            ship.id
+          );
           this.shipsArray[coord[0] + i][coord[1]] = ship;
         } else {
           return false;
@@ -152,17 +163,17 @@ class Gameboard {
     return neighbors;
   }
 
-  markBufferZoneH(coord, i, shipLength) {
+  markBufferZoneH(coord, i, shipLength, shipId) {
     let neighbors = this.getHorizontalNeighbors(i, shipLength);
-    this.distributeBuffer(coord, neighbors);
+    this.distributeBuffer(coord, neighbors, shipId);
   }
 
-  markBufferZoneV(coord, i, shipLength) {
+  markBufferZoneV(coord, i, shipLength, shipId) {
     let neighbors = this.getVerticalNeighbors(i, shipLength);
-    this.distributeBuffer(coord, neighbors);
+    this.distributeBuffer(coord, neighbors, shipId);
   }
 
-  distributeBuffer(coord, neighbors) {
+  distributeBuffer(coord, neighbors, shipId) {
     neighbors.forEach(([dx, dy]) => {
       const newX = coord[0] + dx;
       const newY = coord[1] + dy;
@@ -176,7 +187,7 @@ class Gameboard {
       ) {
         // Mark the cell as part of the buffer zone, if it's not already part of a ship
         if (this.shipsArray[newX][newY] === null) {
-          this.shipsArray[newX][newY] = 1;
+          this.shipsArray[newX][newY] = shipId;
         }
       }
     });
@@ -224,7 +235,7 @@ class Gameboard {
     const shuffledShips = Gameboard.setOfShips.sort(() => Math.random() - 0.5);
 
     // place the rest of the ships with backtracking function
-    if (!this.tryPlaceShips(shuffledShips, 1)) {
+    if (!this.tryPlaceShips(shuffledShips, 0)) {
       console.log("Failed to place all ships.");
     }
   }
