@@ -221,41 +221,52 @@ class Gameboard {
     this.initializeShipsArray();
 
     // place first ship "randomly"
-    let coord = [this.getRandomInt(6), this.getRandomInt(6)];
-    let orientation = this.getRandomInt(2) == 0 ? "h" : "v";
-    let shipLength = Gameboard.setOfShips[0];
-    this.placeShip(shipLength, coord, orientation);
+    const shuffledShips = Gameboard.setOfShips.sort(() => Math.random() - 0.5);
 
     // place the rest of the ships with backtracking function
-    if (!this.tryPlaceShips(Gameboard.setOfShips, 1)) {
+    if (!this.tryPlaceShips(shuffledShips, 1)) {
       console.log("Failed to place all ships.");
     }
   }
 
   tryPlaceShips(setOfShips, index) {
-    if (index >= setOfShips.length - 1) {
-      // -1 because first ship was placed randomly by placeRandomSetOfShips(
-      return true; // Base case: all ships have been placed successfully
+    if (index === setOfShips.length) {
+      return true; // successfully placed all ships
     }
 
     let shipLength = setOfShips[index];
-    for (let y = 0; y < 10; y++) {
-      for (let x = 0; x < 10; x++) {
-        for (let orientation of ["h", "v"]) {
-          if (
-            this.isValidPosition(shipLength, [y, x], orientation) &&
-            this.placeShip(shipLength, [y, x], orientation)
-          ) {
-            if (this.tryPlaceShips(setOfShips, index + 1)) {
-              return true; // Successful recursive placement
-            }
-            // Undo the current ship placement if the recursive placement failed
-            this.removeShip(shipLength, [y, x], orientation);
+    let attempts = []; // avoid repeating attempts
+
+    while (attempts.length < 100) {
+      // Limit the number of attempts (usually it's possible to place everything with less than 10 attempts)
+      let y = this.getRandomInt(10);
+      let x = this.getRandomInt(10);
+      let orientation = this.getRandomInt(2) === 0 ? "h" : "v";
+
+      if (
+        !attempts.find(
+          (attempt) =>
+            attempt.y === y &&
+            attempt.x === x &&
+            attempt.orientation === orientation
+        )
+      ) {
+        attempts.push({ y, x, orientation });
+
+        if (
+          this.isValidPosition(shipLength, [y, x], orientation) &&
+          this.placeShip(shipLength, [y, x], orientation)
+        ) {
+          if (this.tryPlaceShips(setOfShips, index + 1)) {
+            return true;
           }
+          this.removeShip(shipLength, [y, x], orientation);
         }
       }
     }
-    return false; // No valid placement was found for this ship
+
+    console.error("failed to place ships randomly");
+    return false;
   }
 
   removeShip(shipLength, coord, orientation) {
