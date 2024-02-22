@@ -2,8 +2,8 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-  // static setOfShips = [2, 2];
+  // static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  static setOfShips = [2, 2];
 
   constructor() {
     this.shipsArray = [];
@@ -22,12 +22,12 @@ class Gameboard {
     }
   }
 
-  isValidPosition(shipLength, coord, orientation) {
+  isValidPosition(shipLength, coord, orientation, shipId = null) {
     if (orientation == "h") {
       if (coord[1] + shipLength > 10) return false;
       for (let i = 0; i < shipLength; i++) {
         let neighbors = this.getHorizontalNeighbors(i, shipLength);
-        if (!this.checkNeighbors([coord[0], coord[1] + i], neighbors)) {
+        if (!this.checkNeighbors([coord[0], coord[1] + i], neighbors, shipId)) {
           return false;
         }
       }
@@ -37,7 +37,7 @@ class Gameboard {
       if (coord[0] + shipLength > 10) return false;
       for (let i = 0; i < shipLength; i++) {
         let neighbors = this.getVerticalNeighbors(i, shipLength);
-        if (!this.checkNeighbors([coord[0] + i, coord[1]], neighbors)) {
+        if (!this.checkNeighbors([coord[0] + i, coord[1]], neighbors, shipId)) {
           return false;
         }
       }
@@ -183,37 +183,36 @@ class Gameboard {
         newX >= 0 &&
         newX < this.shipsArray.length &&
         newY >= 0 &&
-        newY < this.shipsArray[newX].length
+        newY < this.shipsArray.length
       ) {
         // Mark the cell as part of the buffer zone, if it's not already part of a ship
-        if (this.shipsArray[newX][newY] === null) {
-          this.shipsArray[newX][newY] = shipId;
+        let cell = this.shipsArray[newX][newY];
+        if (cell == null) {
+          this.shipsArray[newX][newY] = [shipId];
+        } else if (Array.isArray(cell)) {
+          this.shipsArray[newX][newY].push(shipId);
         }
       }
     });
   }
 
   // return true if all neighbors are null
-  checkNeighbors(coord, neighbors) {
-    for (let i = 0; i < neighbors.length; i++) {
-      const newX = coord[0] + neighbors[i][0];
-      const newY = coord[1] + neighbors[i][1];
+  checkNeighbors(coord, neighbors, shipId = null) {
+    for (let [dx, dy] of neighbors) {
+      const newX = coord[0] + dx;
+      const newY = coord[1] + dy;
+      // no need to check out of board coords
+      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
 
-      // no need to check "out of board" coordinates
-      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) {
-        continue;
-      }
-
-      if (this.shipsArray[newX][newY] instanceof Ship) {
-        return false;
-      }
+      const cell = this.shipsArray[newX][newY];
+      if (Array.isArray(cell) && cell.includes(shipId)) continue; // Skip if it's the ship's own buffer
+      if (cell instanceof Ship) return false;
     }
-
     return true;
   }
 
   // clear neigbors by setting the cell to null
-  clearNeighbors(coord, neighbors) {
+  clearNeighbors(coord, neighbors, shipId) {
     for (let i = 0; i < neighbors.length; i++) {
       const newX = coord[0] + neighbors[i][0];
       const newY = coord[1] + neighbors[i][1];
@@ -223,7 +222,17 @@ class Gameboard {
         continue;
       }
 
-      this.shipsArray[newX][newY] = null;
+      let cell = this.shipsArray[newX][newY];
+      if (Array.isArray(cell)) {
+        console.log("is array");
+        // Filter out the shipId from the buffer zone array
+        this.shipsArray[newX][newY] = cell.filter((x) => x !== shipId);
+        // After filtering, if the array is empty, set the cell to null
+        if (this.shipsArray[newX][newY].length == 0) {
+          console.log("clearing empty array");
+          this.shipsArray[newX][newY] = null;
+        }
+      }
     }
   }
 
@@ -231,10 +240,10 @@ class Gameboard {
     // clear the board first
     this.initializeShipsArray();
 
-    // place first ship "randomly"
+    // shuffle ships array
     const shuffledShips = Gameboard.setOfShips.sort(() => Math.random() - 0.5);
 
-    // place the rest of the ships with backtracking function
+    // place ships with backtracking function
     if (!this.tryPlaceShips(shuffledShips, 0)) {
       console.log("Failed to place all ships.");
     }
@@ -280,18 +289,18 @@ class Gameboard {
     return false;
   }
 
-  removeShip(shipLength, coord, orientation) {
+  removeShip(shipLength, coord, orientation, shipId = null) {
     console.log("remove ship function");
     for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
         this.shipsArray[coord[0]][coord[1] + i] = null;
         let neighbors = this.getHorizontalNeighbors(i, shipLength);
-        this.clearNeighbors([coord[0], coord[1] + i], neighbors);
+        this.clearNeighbors([coord[0], coord[1] + i], neighbors, shipId);
       } else {
         // orientation == 'v'
         this.shipsArray[coord[0] + i][coord[1]] = null;
         let neighbors = this.getVerticalNeighbors(i, shipLength);
-        this.clearNeighbors([coord[0] + i, coord[1]], neighbors);
+        this.clearNeighbors([coord[0] + i, coord[1]], neighbors, shipId);
       }
     }
   }

@@ -125,7 +125,14 @@ const updatePlayerBoard = (gameboard) => {
 
     console.log(`target coord: ${targetCoord}`);
 
-    if (gameboard.isValidPosition(shipLength, targetCoord, shipOrientation)) {
+    if (
+      gameboard.isValidPosition(
+        shipLength,
+        targetCoord,
+        shipOrientation,
+        shipId
+      )
+    ) {
       console.log("valid position");
       gameboard.placeShip(shipLength, targetCoord, shipOrientation);
       gameboard.removeShip(shipLength, origCoord, shipOrientation, shipId);
