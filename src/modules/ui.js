@@ -134,8 +134,8 @@ const updatePlayerBoard = (gameboard) => {
       )
     ) {
       console.log("valid position");
-      gameboard.placeShip(shipLength, targetCoord, shipOrientation);
       gameboard.removeShip(shipLength, origCoord, shipOrientation, shipId);
+      gameboard.placeShip(shipLength, targetCoord, shipOrientation);
       updatePlayerBoard(gameboard);
       console.table(gameboard.shipsArray);
     } else {

@@ -224,12 +224,10 @@ class Gameboard {
 
       let cell = this.shipsArray[newX][newY];
       if (Array.isArray(cell)) {
-        console.log("is array");
         // Filter out the shipId from the buffer zone array
         this.shipsArray[newX][newY] = cell.filter((x) => x !== shipId);
         // After filtering, if the array is empty, set the cell to null
         if (this.shipsArray[newX][newY].length == 0) {
-          console.log("clearing empty array");
           this.shipsArray[newX][newY] = null;
         }
       }
