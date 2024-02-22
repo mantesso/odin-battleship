@@ -2,8 +2,8 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  // static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-  static setOfShips = [2, 2];
+  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  // static setOfShips = [4, 2];
 
   constructor() {
     this.shipsArray = [];
@@ -44,6 +44,18 @@ class Gameboard {
     }
 
     return true;
+  }
+
+  rotateShip(shipLength, coord, orientation, shipId) {
+    const newOrientation = orientation == "h" ? "v" : "h";
+
+    if (this.isValidPosition(shipLength, coord, newOrientation, shipId)) {
+      this.removeShip(shipLength, coord, orientation, shipId);
+      this.placeShip(shipLength, coord, newOrientation);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   placeShip(shipLength, coord, orientation) {
@@ -335,18 +347,3 @@ class Gameboard {
 }
 
 module.exports = Gameboard;
-
-// let gameboard = new Gameboard();
-// gameboard.placeShip(3, [1, 1], "v");
-
-// console.log(gameboard.isValidPosition(1, [2, 2], "h"));
-// gameboard.placeRandomSetOfShips();
-
-// console.log(gameboard.placeShip(3, [1, 1], "h"));
-// console.log(gameboard.placeShip(3, [1, 1], "v"));
-// console.log(gameboard.receiveAttack([0, 0]));
-// console.table(gameboard.shipsArray);
-
-// gameboard.removeShip(3, [1, 1], "v");
-// console.log(gameboard.allSunk());
-// console.table(gameboard.shipsArray);

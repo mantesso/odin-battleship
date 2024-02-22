@@ -42,7 +42,14 @@ const updatePlayerBoard = (gameboard) => {
           ship.style.width = `31px`;
         }
 
-        ship.classList.add("bg-sky-500", "absolute", "z-20", "top-0", "left-0");
+        ship.classList.add(
+          "bg-sky-500",
+          "absolute",
+          "z-20",
+          "top-0",
+          "left-0",
+          "cursor-move"
+        );
 
         ship.setAttribute("draggable", true);
         ship.setAttribute("data-length", shipBlock.length);
@@ -56,6 +63,16 @@ const updatePlayerBoard = (gameboard) => {
           e.dataTransfer.setData("shipLength", shipBlock.length.toString());
           e.dataTransfer.setData("shipOrientation", shipBlock.orientation);
           e.dataTransfer.setData("origCoord", [y, x]);
+        });
+
+        ship.addEventListener("click", () => {
+          gameboard.rotateShip(
+            shipBlock.length,
+            [y, x],
+            shipBlock.orientation,
+            shipBlock.id
+          );
+          updatePlayerBoard(gameboard);
         });
 
         grid.appendChild(ship);
