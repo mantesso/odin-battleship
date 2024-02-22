@@ -205,8 +205,17 @@ class Gameboard {
       if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
 
       const cell = this.shipsArray[newX][newY];
-      if (Array.isArray(cell) && cell.includes(shipId)) continue; // Skip if it's the ship's own buffer
-      if (cell instanceof Ship) return false;
+
+      if (Array.isArray(cell) && cell.includes(shipId)) {
+        continue; // Skip if it's the ship's own buffer
+      }
+      if (cell instanceof Ship) {
+        if (cell.id == shipId) {
+          continue; // no need to check where the ship being moved was previously placed
+        } else {
+          return false;
+        }
+      }
     }
     return true;
   }
