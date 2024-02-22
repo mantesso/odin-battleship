@@ -16,13 +16,13 @@ let gameStarted = false;
 player.gameboard.placeRandomSetOfShips();
 enemy.gameboard.placeRandomSetOfShips();
 
-updatePlayerBoard(player.gameboard);
+updatePlayerBoard(player.gameboard, gameStarted);
 updateEnemyBoard(enemy.gameboard, handlePlayerAttack);
 
 placeRandom.addEventListener("click", () => {
   if (!gameStarted) {
     player.gameboard.placeRandomSetOfShips();
-    updatePlayerBoard(player.gameboard);
+    updatePlayerBoard(player.gameboard, gameStarted);
   }
 });
 
@@ -33,6 +33,7 @@ startGameButton.addEventListener("click", () => {
 const startGame = () => {
   console.log("Game started");
   gameStarted = true;
+  updatePlayerBoard(player.gameboard, gameStarted);
   uiGameStarted();
 };
 
@@ -58,11 +59,11 @@ const computerAttacks = () => {
   console.log("computer attacks");
   let attackCoords = enemy.randomAttack();
   player.gameboard.receiveAttack(attackCoords);
-  updatePlayerBoard(player.gameboard);
+  updatePlayerBoard(player.gameboard, gameStarted);
 
   // Check if game has ended
   if (player.gameboard.allSunk()) {
-    updatePlayerBoard(player.gameboard);
+    updatePlayerBoard(player.gameboard, gameStarted);
     alert("Computer wins!");
     // Handle end game
   }

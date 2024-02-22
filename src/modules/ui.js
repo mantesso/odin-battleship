@@ -5,7 +5,8 @@ const placeRandom = document.getElementById("placeRandom");
 const startGameButton = document.getElementById("startGameButton");
 const backdropBlur = document.getElementById("backdropBlur");
 
-const updatePlayerBoard = (gameboard) => {
+const updatePlayerBoard = (gameboard, gameStarted) => {
+  console.log(`game started? ${gameStarted}`);
   playerBoard.innerHTML = "";
 
   const renderedShips = new Set();
@@ -42,38 +43,20 @@ const updatePlayerBoard = (gameboard) => {
           ship.style.width = `31px`;
         }
 
-        ship.classList.add(
-          "bg-sky-500",
-          "absolute",
-          "z-20",
-          "top-0",
-          "left-0",
-          "cursor-move"
-        );
+        ship.classList.add("bg-sky-500", "absolute", "z-20", "top-0", "left-0");
+        if (!gameStarted) ship.classList.add("cursor-move");
 
         ship.setAttribute("draggable", true);
         ship.setAttribute("data-length", shipBlock.length);
         ship.setAttribute("data-orientation", shipBlock.orientation);
         ship.setAttribute("ship-id", shipBlock.id);
 
-        ship.addEventListener("dragstart", (e) => {
-          console.log("dragstart event");
-          e.dataTransfer.setData("text/plain", shipBlock.id.toString());
-          e.dataTransfer.setData("shipId", shipBlock.id.toString());
-          e.dataTransfer.setData("shipLength", shipBlock.length.toString());
-          e.dataTransfer.setData("shipOrientation", shipBlock.orientation);
-          e.dataTransfer.setData("origCoord", [y, x]);
-        });
-
-        ship.addEventListener("click", () => {
-          gameboard.rotateShip(
-            shipBlock.length,
-            [y, x],
-            shipBlock.orientation,
-            shipBlock.id
-          );
-          updatePlayerBoard(gameboard);
-        });
+        if (!gameStarted) {
+          ship.addEventListener("dragstart", handleDragstart);
+          ship.addEventListener("click", () => {
+            handleRotate(gameboard, shipBlock, x, y);
+          });
+        }
 
         grid.appendChild(ship);
       }
@@ -113,10 +96,10 @@ const updatePlayerBoard = (gameboard) => {
       grid.setAttribute("data-y", y);
       grid.setAttribute("data-x", x);
 
-      grid.addEventListener("dragover", (e) => {
-        e.preventDefault();
-      });
-      grid.addEventListener("drop", handleDrop);
+      if (!gameStarted) {
+        grid.addEventListener("dragover", handleDragover);
+        grid.addEventListener("drop", handleDrop);
+      }
 
       playerBoard.appendChild(grid);
     }
@@ -161,6 +144,35 @@ const updatePlayerBoard = (gameboard) => {
     }
   }
 };
+
+function handleRotate(gameboard, shipBlock, x, y) {
+  gameboard.rotateShip(
+    shipBlock.length,
+    [y, x],
+    shipBlock.orientation,
+    shipBlock.id
+  );
+  updatePlayerBoard(gameboard);
+}
+
+function handleDragstart(e) {
+  const shipId = String(e.target.getAttribute("ship-id"));
+  const shipLength = String(e.target.getAttribute("data-length"));
+  const shipOrientation = String(e.target.getAttribute("data-orientation"));
+  const origCoord = [
+    Number(e.target.parentElement.getAttribute("data-y")),
+    Number(e.target.parentElement.getAttribute("data-x")),
+  ];
+  e.dataTransfer.setData("text/plain", shipId);
+  e.dataTransfer.setData("shipId", shipId);
+  e.dataTransfer.setData("shipLength", shipLength);
+  e.dataTransfer.setData("shipOrientation", shipOrientation);
+  e.dataTransfer.setData("origCoord", origCoord);
+}
+
+function handleDragover(e) {
+  e.preventDefault();
+}
 
 const updateEnemyBoard = (gameboard, onAttack) => {
   console.log("updateEnemyBoard Function");

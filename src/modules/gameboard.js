@@ -2,8 +2,8 @@ const Ship = require("./ship");
 
 class Gameboard {
   // default set of ships (lenght)
-  static setOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-  // static setOfShips = [4, 2];
+  static setOfShips = [4, 3, 3, 2, 2, 1, 1];
+  // static setOfShips = [5, 4, 3, 3, 2];
 
   constructor() {
     this.shipsArray = [];
@@ -309,7 +309,6 @@ class Gameboard {
   }
 
   removeShip(shipLength, coord, orientation, shipId = null) {
-    console.log("remove ship function");
     for (let i = 0; i < shipLength; i++) {
       if (orientation == "h") {
         this.shipsArray[coord[0]][coord[1] + i] = null;
