@@ -4,9 +4,12 @@ const {
   updateEnemyBoard,
   uiGameStarted,
   startGameButton,
+  playAgainButton,
+  gameOverInfo,
+  replayGame,
 } = require("./ui");
 
-// creates players
+// create players
 let player = new Player();
 let enemy = new Player();
 
@@ -17,7 +20,7 @@ player.gameboard.placeRandomSetOfShips();
 enemy.gameboard.placeRandomSetOfShips();
 
 updatePlayerBoard(player.gameboard, gameStarted);
-updateEnemyBoard(enemy.gameboard, handlePlayerAttack);
+updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted);
 
 placeRandom.addEventListener("click", () => {
   if (!gameStarted) {
@@ -30,24 +33,41 @@ startGameButton.addEventListener("click", () => {
   startGame();
 });
 
+playAgainButton.addEventListener("click", () => {
+  gameStarted = false;
+  player = new Player();
+  enemy = new Player();
+
+  player.gameboard.placeRandomSetOfShips();
+  enemy.gameboard.placeRandomSetOfShips();
+  updatePlayerBoard(player.gameboard, gameStarted);
+  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted);
+  replayGame();
+});
+
 const startGame = () => {
   console.log("Game started");
   gameStarted = true;
   updatePlayerBoard(player.gameboard, gameStarted);
+  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted);
   uiGameStarted();
 };
 
-const gameOver = (winner) => {};
+const gameOver = (winner) => {
+  gameStarted = false;
+  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted);
+  gameOverInfo(winner);
+};
 
 function handlePlayerAttack(coord) {
   console.log("Player attacks enemy");
   enemy.gameboard.receiveAttack(coord);
-  updateEnemyBoard(enemy.gameboard, handlePlayerAttack); // Refresh enemy board display
+  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted); // Refresh enemy board display
 
   // Check if game has ended
   if (enemy.gameboard.allSunk()) {
-    alert("Player wins!");
-    // Handle end game
+    // alert("Player wins!");
+    gameOver("Player");
   } else {
     setTimeout(() => {
       computerAttacks();
@@ -64,7 +84,7 @@ const computerAttacks = () => {
   // Check if game has ended
   if (player.gameboard.allSunk()) {
     updatePlayerBoard(player.gameboard, gameStarted);
-    alert("Computer wins!");
-    // Handle end game
+    // alert("Computer wins!");
+    gameOver("Computer");
   }
 };

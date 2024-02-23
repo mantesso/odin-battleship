@@ -4,6 +4,9 @@ const enemyBoard = document.getElementById("enemyBoard");
 const placeRandom = document.getElementById("placeRandom");
 const startGameButton = document.getElementById("startGameButton");
 const backdropBlur = document.getElementById("backdropBlur");
+const gameInfoContainer = document.getElementById("gameInfoContainer");
+const gameWinner = document.getElementById("gameWinner");
+const playAgainButton = document.getElementById("playAgainButton");
 
 const updatePlayerBoard = (gameboard, gameStarted) => {
   console.log(`game started? ${gameStarted}`);
@@ -174,7 +177,7 @@ function handleDragover(e) {
   e.preventDefault();
 }
 
-const updateEnemyBoard = (gameboard, onAttack) => {
+const updateEnemyBoard = (gameboard, onAttack, gameStarted) => {
   console.log("updateEnemyBoard Function");
   console.log(`missed shots on enemy board: ${gameboard.missedShots}`);
 
@@ -233,10 +236,15 @@ const updateEnemyBoard = (gameboard, onAttack) => {
         !gameboard.missedShots.some(([dy, dx]) => dy === y && dx === x) &&
         !gameboard.successShots.some(([dy, dx]) => dy === y && dx === x)
       ) {
-        grid.addEventListener("click", (e) => {
-          let coord = [Number(e.target.dataset.y), Number(e.target.dataset.x)];
-          onAttack(coord);
-        });
+        if (gameStarted) {
+          grid.addEventListener("click", (e) => {
+            let coord = [
+              Number(e.target.dataset.y),
+              Number(e.target.dataset.x),
+            ];
+            onAttack(coord);
+          });
+        }
       }
       enemyBoard.appendChild(grid);
     }
@@ -252,9 +260,24 @@ const uiGameStarted = () => {
   placeRandom.classList.add("hidden");
 };
 
+const gameOverInfo = (winner) => {
+  gameInfoContainer.classList.remove("hidden");
+  gameWinner.innerText = winner;
+};
+
+const replayGame = () => {
+  gameInfoContainer.classList.add("hidden");
+  backdropBlur.classList.remove("hidden");
+  enemyBoard.classList.add("opacity-40");
+  placeRandom.classList.remove("hidden");
+};
+
 module.exports = {
   updatePlayerBoard,
   updateEnemyBoard,
   uiGameStarted,
   startGameButton,
+  playAgainButton,
+  gameOverInfo,
+  replayGame,
 };
