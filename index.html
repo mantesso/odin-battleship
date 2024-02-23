@@ -8,9 +8,9 @@
   </head>
   <body class="bg-stone-50 mx-auto font-mono">
     <h1 class="text-4xl text-blue-700 text-center mt-8 mb-16">
-      Odin battleship
+      Odin battleship 🚢
     </h1>
-    <div class="flex justify-center items-center gap-48 mx-auto">
+    <div class="flex justify-center items-center gap-16 mx-auto">
       <div class="relative">
         <div
           id="playerBoard"
@@ -70,6 +70,21 @@
               </svg>
             </button>
           </div>
+        </div>
+      </div>
+      <div class="self-start w-32 justify-center text-center">
+        <div
+          id="gameInfoContainer"
+          class="hidden flex flex-col content-center justify-center gap-2"
+        >
+          <p>Game Over</p>
+          <p class=""><span id="gameWinner" class="font-bold"></span> Wins!</p>
+          <button
+            id="playAgainButton"
+            class="text-xs flex justify-center items-center gap-2 font-bold text-white bg-green-600 hover:bg-green-500 px-3 py-2 rounded-md shadow-md"
+          >
+            Play again?
+          </button>
         </div>
       </div>
       <div id="enemyContainer" class="relative">
