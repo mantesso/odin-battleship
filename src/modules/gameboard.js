@@ -3,7 +3,6 @@ const Ship = require("./ship");
 class Gameboard {
   // default set of ships (lenght)
   static setOfShips = [4, 3, 3, 2, 2, 1, 1];
-  // static setOfShips = [5, 4, 3, 3, 2];
 
   constructor() {
     this.shipsArray = [];
@@ -59,13 +58,6 @@ class Gameboard {
   }
 
   placeShip(shipLength, coord, orientation) {
-    if (orientation === "h" && coord[1] + shipLength > 10) {
-      return false; // Out of bounds horizontally
-    }
-    if (orientation === "v" && coord[0] + shipLength > 10) {
-      return false; // Out of bounds vertically
-    }
-
     const ship = new Ship(shipLength, orientation);
 
     for (let i = 0; i < shipLength; i++) {
@@ -191,12 +183,7 @@ class Gameboard {
       const newY = coord[1] + dy;
 
       // Check if the new coordinates are within grid bounds
-      if (
-        newX >= 0 &&
-        newX < this.shipsArray.length &&
-        newY >= 0 &&
-        newY < this.shipsArray.length
-      ) {
+      if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10) {
         // Mark the cell as part of the buffer zone, if it's not already part of a ship
         let cell = this.shipsArray[newX][newY];
         if (cell == null) {
@@ -239,9 +226,7 @@ class Gameboard {
       const newY = coord[1] + neighbors[i][1];
 
       // no need to check "out of board" coordinates
-      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) {
-        continue;
-      }
+      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
 
       let cell = this.shipsArray[newX][newY];
       if (Array.isArray(cell)) {
@@ -255,23 +240,24 @@ class Gameboard {
     }
   }
 
+  shuffledShipsArray() {
+    return Gameboard.setOfShips.sort(() => Math.random() - 0.5);
+  }
+
   placeRandomSetOfShips() {
     // clear the board first
     this.initializeShipsArray();
 
     // shuffle ships array
-    const shuffledShips = Gameboard.setOfShips.sort(() => Math.random() - 0.5);
-
+    const shuffledShips = this.shuffledShipsArray();
     // place ships with backtracking function
     if (!this.tryPlaceShips(shuffledShips, 0)) {
-      console.log("Failed to place all ships.");
+      console.error("Failed to place all ships.");
     }
   }
 
   tryPlaceShips(setOfShips, index) {
-    if (index === setOfShips.length) {
-      return true; // successfully placed all ships
-    }
+    if (index === setOfShips.length) return true; // successfully placed all ships
 
     let shipLength = setOfShips[index];
     let attempts = []; // avoid repeating attempts
@@ -314,8 +300,7 @@ class Gameboard {
         this.shipsArray[coord[0]][coord[1] + i] = null;
         let neighbors = this.getHorizontalNeighbors(i, shipLength);
         this.clearNeighbors([coord[0], coord[1] + i], neighbors, shipId);
-      } else {
-        // orientation == 'v'
+      } else if (orientation == "v") {
         this.shipsArray[coord[0] + i][coord[1]] = null;
         let neighbors = this.getVerticalNeighbors(i, shipLength);
         this.clearNeighbors([coord[0] + i, coord[1]], neighbors, shipId);
@@ -344,5 +329,9 @@ class Gameboard {
     return ships.every((ship) => ship.isSunk());
   }
 }
+
+// let gameboard = new Gameboard();
+// gameboard.placeShip(4, [0, 7], "v");
+// console.table(gameboard.shipsArray);
 
 module.exports = Gameboard;
