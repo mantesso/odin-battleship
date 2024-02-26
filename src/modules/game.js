@@ -15,7 +15,7 @@ let enemy = new Player();
 
 let gameStarted = false;
 
-// ship positioning
+// initial ship positioning
 player.gameboard.placeRandomSetOfShips();
 enemy.gameboard.placeRandomSetOfShips();
 
@@ -55,7 +55,7 @@ const startGame = () => {
 
 const gameOver = (winner) => {
   gameStarted = false;
-  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted);
+  updateEnemyBoard(enemy.gameboard, handlePlayerAttack, gameStarted); // will block user from hitting enemy board after game is over
   gameOverInfo(winner);
 };
 
@@ -66,12 +66,11 @@ function handlePlayerAttack(coord) {
 
   // Check if game has ended
   if (enemy.gameboard.allSunk()) {
-    // alert("Player wins!");
     gameOver("Player");
   } else {
     setTimeout(() => {
       computerAttacks();
-    }, 250);
+    }, 250); // adds delay to simulate a person playing
   }
 }
 
@@ -84,7 +83,6 @@ const computerAttacks = () => {
   // Check if game has ended
   if (player.gameboard.allSunk()) {
     updatePlayerBoard(player.gameboard, gameStarted);
-    // alert("Computer wins!");
     gameOver("Computer");
   }
 };

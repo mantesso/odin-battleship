@@ -178,18 +178,18 @@ class Gameboard {
   }
 
   distributeBuffer(coord, neighbors, shipId) {
-    neighbors.forEach(([dx, dy]) => {
-      const newX = coord[0] + dx;
-      const newY = coord[1] + dy;
+    neighbors.forEach(([dy, dx]) => {
+      const newY = coord[0] + dy;
+      const newX = coord[1] + dx;
 
       // Check if the new coordinates are within grid bounds
-      if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10) {
+      if (newY >= 0 && newY < 10 && newX >= 0 && newX < 10) {
         // Mark the cell as part of the buffer zone, if it's not already part of a ship
-        let cell = this.shipsArray[newX][newY];
+        let cell = this.shipsArray[newY][newX];
         if (cell == null) {
-          this.shipsArray[newX][newY] = [shipId];
+          this.shipsArray[newY][newX] = [shipId];
         } else if (Array.isArray(cell)) {
-          this.shipsArray[newX][newY].push(shipId);
+          this.shipsArray[newY][newX].push(shipId);
         }
       }
     });
@@ -197,13 +197,13 @@ class Gameboard {
 
   // return true if all neighbors are null
   checkNeighbors(coord, neighbors, shipId = null) {
-    for (let [dx, dy] of neighbors) {
-      const newX = coord[0] + dx;
-      const newY = coord[1] + dy;
+    for (let [dy, dx] of neighbors) {
+      const newY = coord[0] + dy;
+      const newX = coord[1] + dx;
       // no need to check out of board coords
-      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
+      if (newY < 0 || newX < 0 || newY >= 10 || newX >= 10) continue;
 
-      const cell = this.shipsArray[newX][newY];
+      const cell = this.shipsArray[newY][newX];
 
       if (Array.isArray(cell) && cell.includes(shipId)) {
         continue; // Skip if it's the ship's own buffer
@@ -222,19 +222,19 @@ class Gameboard {
   // clear neigbors by setting the cell to null
   clearNeighbors(coord, neighbors, shipId) {
     for (let i = 0; i < neighbors.length; i++) {
-      const newX = coord[0] + neighbors[i][0];
-      const newY = coord[1] + neighbors[i][1];
+      const newY = coord[0] + neighbors[i][0];
+      const newX = coord[1] + neighbors[i][1];
 
-      // no need to check "out of board" coordinates
-      if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
+      // no need to clear "out of board" coordinates
+      if (newY < 0 || newX < 0 || newY >= 10 || newX >= 10) continue;
 
-      let cell = this.shipsArray[newX][newY];
+      let cell = this.shipsArray[newY][newX];
       if (Array.isArray(cell)) {
         // Filter out the shipId from the buffer zone array
-        this.shipsArray[newX][newY] = cell.filter((x) => x !== shipId);
+        this.shipsArray[newY][newX] = cell.filter((x) => x !== shipId);
         // After filtering, if the array is empty, set the cell to null
-        if (this.shipsArray[newX][newY].length == 0) {
-          this.shipsArray[newX][newY] = null;
+        if (this.shipsArray[newY][newX].length == 0) {
+          this.shipsArray[newY][newX] = null;
         }
       }
     }
@@ -324,14 +324,11 @@ class Gameboard {
     }
   }
 
+  // returns true if all ships have sunk
   allSunk() {
     const ships = this.shipsArray.flat().filter((cell) => cell instanceof Ship);
     return ships.every((ship) => ship.isSunk());
   }
 }
-
-// let gameboard = new Gameboard();
-// gameboard.placeShip(4, [0, 7], "v");
-// console.table(gameboard.shipsArray);
 
 module.exports = Gameboard;

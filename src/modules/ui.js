@@ -7,6 +7,7 @@ const backdropBlur = document.getElementById("backdropBlur");
 const gameInfoContainer = document.getElementById("gameInfoContainer");
 const gameWinner = document.getElementById("gameWinner");
 const playAgainButton = document.getElementById("playAgainButton");
+const gameInstructions = document.getElementById("gameInstructions");
 
 const updatePlayerBoard = (gameboard, gameStarted) => {
   console.log(`game started? ${gameStarted}`);
@@ -126,8 +127,6 @@ const updatePlayerBoard = (gameboard, gameStarted) => {
       return;
     }
 
-    console.log(`target coord: ${targetCoord}`);
-
     if (
       gameboard.isValidPosition(
         shipLength,
@@ -136,14 +135,12 @@ const updatePlayerBoard = (gameboard, gameStarted) => {
         shipId
       )
     ) {
-      console.log("valid position");
+      //valid position
       gameboard.removeShip(shipLength, origCoord, shipOrientation, shipId);
       gameboard.placeShip(shipLength, targetCoord, shipOrientation);
       updatePlayerBoard(gameboard);
-      console.table(gameboard.shipsArray);
     } else {
       console.log("invalid position");
-      console.table(gameboard.shipsArray);
     }
   }
 };
@@ -178,9 +175,6 @@ function handleDragover(e) {
 }
 
 const updateEnemyBoard = (gameboard, onAttack, gameStarted) => {
-  console.log("updateEnemyBoard Function");
-  console.log(`missed shots on enemy board: ${gameboard.missedShots}`);
-
   enemyBoard.innerHTML = "";
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
@@ -256,10 +250,12 @@ const uiGameStarted = () => {
   backdropBlur.classList.add("hidden");
   enemyBoard.classList.remove("opacity-40");
 
-  // hide place random button
+  // hide place random button and instructions
   placeRandom.classList.add("hidden");
+  gameInstructions.classList.add("hidden");
 };
 
+// displays winner information on the page
 const gameOverInfo = (winner) => {
   gameInfoContainer.classList.remove("hidden");
   gameWinner.innerText = winner;
