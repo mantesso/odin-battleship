@@ -10,7 +10,6 @@ const playAgainButton = document.getElementById("playAgainButton");
 const gameInstructions = document.getElementById("gameInstructions");
 
 const updatePlayerBoard = (gameboard, gameStarted) => {
-  console.log(`game started? ${gameStarted}`);
   playerBoard.innerHTML = "";
 
   const renderedShips = new Set();
@@ -35,7 +34,6 @@ const updatePlayerBoard = (gameboard, gameStarted) => {
       );
 
       if (shipBlock instanceof Ship && !renderedShips.has(shipBlock.id)) {
-        console.log(shipBlock);
         renderedShips.add(shipBlock.id);
 
         let ship = document.createElement("div");

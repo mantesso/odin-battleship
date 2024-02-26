@@ -58,6 +58,7 @@ class Gameboard {
   }
 
   placeShip(shipLength, coord, orientation) {
+    if (!this.isValidPosition(shipLength, coord, orientation)) return false;
     const ship = new Ship(shipLength, orientation);
 
     for (let i = 0; i < shipLength; i++) {
