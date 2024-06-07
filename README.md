@@ -24,3 +24,10 @@ Developed as part of The Odin Project's JavaScript [course](https://www.theodinp
 - Requires Node.js installed on your system.
 - In the project directory in your terminal and run `npm install` to install required dependencies.
 - Run `npm run build` to bundle the project using webpack and `npm run dev` to run the project locally.
+- The project will be available on port `http://localhost:3000/`
+
+## Run a dockerized version of the project
+
+- Pull Image: `docker pull mantesso/odin-battleship`
+- Run the Container: `docker run -p 3000:3000 mantesso/odin-battleship`
+- The project will be available on `http://localhost:3000/`
