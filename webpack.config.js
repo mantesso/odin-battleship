@@ -15,6 +15,7 @@ module.exports = {
     open: true,
     hot: true,
     compress: true,
+    public: 'odin-battleship.fly.dev',
     historyApiFallback: true,
   },
   module: {
