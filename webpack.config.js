@@ -11,6 +11,8 @@ module.exports = {
     static: {
       directory: path.resolve(__dirname, "dist"),
     },
+    host: '0.0.0.0',
+    public: 'odin-battleship.fly.dev',
     port: 3000,
     open: true,
     hot: true,
