@@ -7,4 +7,4 @@ COPY . .
 RUN npm run build
 RUN adduser -D appuser
 USER appuser
-CMD npm run dev
+CMD npm run start
