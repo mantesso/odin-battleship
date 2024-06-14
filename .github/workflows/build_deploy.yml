@@ -4,6 +4,7 @@ on:
     branches:
       - main
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -19,8 +20,10 @@ jobs:
       - name: Build the image and push it to Docker Hub
         uses: docker/build-push-action@v5
         with:
+          file: ./Dockerfile.nginx  # uses the nginx image 
           push: true
           tags: mantesso/odin-battleship:ex_3.2
+
 
   deploy:
     name: odin-battleship-fly
