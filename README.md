@@ -28,6 +28,8 @@ Developed as part of The Odin Project's JavaScript [course](https://www.theodinp
 
 ## Run a dockerized version of the project
 
-- Pull Image: `docker pull mantesso/odin-battleship`
-- Run the Container: `docker run -p 3000:3000 mantesso/odin-battleship`
-- The project will be available on `http://localhost:3000/`
+As a part of the [DevOps with Docker course](https://devopswithdocker.com) I created a minimal docker image for this project as an exercise:
+
+- Pull Image: `docker pull mantesso/odin-battleship:nginx`
+- Run the Container: `docker run -p 8080:80 mantesso/odin-battleship:nginx`
+- The project will be available on `http://localhost:8080/`
