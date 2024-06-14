@@ -23,14 +23,14 @@ jobs:
           tags: mantesso/odin-battleship:ex_3.2
 
   deploy:
-    needs: build
     name: odin-battleship-fly
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only --dockerfile Dockerfile.node # using the Dockerfile.node here because deployment on Fly did not work with nginx image
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
 
 
