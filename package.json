@@ -7,7 +7,7 @@
     "test": "jest",
     "dev": "webpack serve",
     "build": "webpack",
-    "start": "webpack serve"
+    "start": "serve -s dist"
   },
   "author": "",
   "license": "ISC",
@@ -23,5 +23,8 @@
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.0"
+  },
+  "dependencies": {
+    "serve": "^14.2.3"
   }
 }
