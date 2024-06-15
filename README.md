@@ -4,7 +4,8 @@
 
 Developed as part of The Odin Project's JavaScript [course](https://www.theodinproject.com/lessons/javascript-battleship). Classic game of battleship [(rules)](<https://en.wikipedia.org/wiki/Battleship_(game)>).
 
-## Live preview: https://mantesso.github.io/odin-battleship/
+Live preview (1): https://mantesso.github.io/odin-battleship/
+As an exercise (3.2) of [DevOps with Docker course](https://devopswithdocker.com). I deployed this project to fly.io using github actions. It's available here: https://odin-battleship.fly.dev/ 
 
 ![Example Image](img/screenshot.png)
 
